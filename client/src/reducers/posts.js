@@ -1,7 +1,7 @@
 export default (posts=[], action) =>{
     switch(action.type){
-        case "FECTCH_ALL":
-            return posts;
+        case "FETCH_ALL":
+            return action.payload;
         case 'CREATE':
             return posts;
         default:
