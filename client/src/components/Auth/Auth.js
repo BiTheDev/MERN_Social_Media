@@ -11,10 +11,12 @@ import {
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./styles";
 import Input from "./Input";
-import Icon from "./icon";
+//import Icon from "./icon";
 import {useDispatch} from'react-redux';
 import { useHistory } from "react-router-dom";
+import { signin, signup } from "../../actions/auth";
 
+const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 // import { googleClientID } from "../../security/tokens";
 export const Auth = () => {
   const classes = useStyles();
@@ -22,11 +24,21 @@ export const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [isSignUp, setIsSignUp] = useState(false);
-
+  const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const history = useHistory();
-  const handleSubmit = () => {};
-  const handleChange = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if(isSignUp){
+      dispatch(signup(formData, history));
+    }else{
+      dispatch(signin(formData, history));
+    }
+  };
+  const handleChange = (e) => {
+    setFormData({...formData, [e.target.name]:e.target.value})
+  };
   const handleShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
@@ -34,19 +46,19 @@ export const Auth = () => {
     setIsSignUp((prevIsSignUp) => !prevIsSignUp);
     handleShowPassword(false);
   };
-  const googleSuccess= async (res)=>{
-   // '?.'optional chaining operator, means wont throw error if not found
-    const result = res?.profileObj; 
-    const token = res?.tokenId;
+  // const googleSuccess= async (res)=>{
+  //  // '?.'optional chaining operator, means wont throw error if not found
+  //   const result = res?.profileObj; 
+  //   const token = res?.tokenId;
 
-        try {
-            dispatch({type:'AUTH', data: (result, token)});
+  //       try {
+  //           dispatch({type:'AUTH', data: (result, token)});
 
-            history.push('/');
-        } catch (error) {
-            console.log(error);
-        }
-  }
+  //           history.push('/');
+  //       } catch (error) {
+  //           console.log(error);
+  //       }
+  // }
 //   const googleFailure=(error)=>{
 //     console.log(error);
 //     console.log("Google Sign in Failed. Try Again later")
