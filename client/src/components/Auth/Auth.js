@@ -12,6 +12,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./styles";
 import Input from "./Input";
 import Icon from "./icon";
+import {useDispatch} from'react-redux';
+import { useHistory } from "react-router-dom";
+
 // import { googleClientID } from "../../security/tokens";
 export const Auth = () => {
   const classes = useStyles();
@@ -20,6 +23,8 @@ export const Auth = () => {
 
   const [isSignUp, setIsSignUp] = useState(false);
 
+  const dispatch = useDispatch();
+  const history = useHistory();
   const handleSubmit = () => {};
   const handleChange = () => {};
   const handleShowPassword = () => {
@@ -29,9 +34,19 @@ export const Auth = () => {
     setIsSignUp((prevIsSignUp) => !prevIsSignUp);
     handleShowPassword(false);
   };
-//   const googleSuccess= async (res)=>{
-//     console.log(res);
-//   }
+  const googleSuccess= async (res)=>{
+   // '?.'optional chaining operator, means wont throw error if not found
+    const result = res?.profileObj; 
+    const token = res?.tokenId;
+
+        try {
+            dispatch({type:'AUTH', data: (result, token)});
+
+            history.push('/');
+        } catch (error) {
+            console.log(error);
+        }
+  }
 //   const googleFailure=(error)=>{
 //     console.log(error);
 //     console.log("Google Sign in Failed. Try Again later")
@@ -78,7 +93,7 @@ export const Auth = () => {
             {isSignUp && (
               <Input
                 name="confirmPassword"
-                label="Repeat Pasaword"
+                label="Repeat Password"
                 handleChange={handleChange}
                 type="password"
               />
