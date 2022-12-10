@@ -44,7 +44,7 @@ export const Auth = () => {
   };
   const switchMode = () => {
     setIsSignUp((prevIsSignUp) => !prevIsSignUp);
-    handleShowPassword(false);
+    setShowPassword(false);
   };
   // const googleSuccess= async (res)=>{
   //  // '?.'optional chaining operator, means wont throw error if not found
