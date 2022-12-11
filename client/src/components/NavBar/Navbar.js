@@ -4,7 +4,7 @@ import {AppBar, Avatar, Toolbar, Typography,Button} from '@material-ui/core';
 import useStyles from './style';
 import memories from '../../images/memories.png';
 import {useDispatch} from 'react-redux';
-import { decode } from 'jsonwebtoken';
+import decode from 'jwt-decode';
 const Navbar = () => {
     const classes = useStyles();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
