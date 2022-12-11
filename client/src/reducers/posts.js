@@ -4,6 +4,8 @@ export default (posts=[], action) =>{
     switch(action.type){
         case actionType.FETCH_ALL:
             return action.payload;
+        case actionType.FETCH_BY_SEARCH:
+            return action.payload;
         case actionType.CREATE:
             return [...posts, action.payload];
         case actionType.UPDATE:

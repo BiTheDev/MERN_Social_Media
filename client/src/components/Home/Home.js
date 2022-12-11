@@ -47,6 +47,7 @@ export const Home = () => {
     if(search.trim() || tags){
         //dispatch to fetch search post
         dispatch(getPostBySearch({search, tags: tags.join(',')}));
+        history.push(`/posts/search?searchQuery=${search || 'none'}&tags=${tags}`);
     }else{
         history.push('/');
     }
