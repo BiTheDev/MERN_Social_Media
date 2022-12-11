@@ -4,6 +4,7 @@ import {AppBar, Avatar, Toolbar, Typography,Button} from '@material-ui/core';
 import useStyles from './style';
 import memories from '../../images/memories.png';
 import {useDispatch} from 'react-redux';
+import { decode } from 'jsonwebtoken';
 const Navbar = () => {
     const classes = useStyles();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
@@ -22,6 +23,13 @@ const Navbar = () => {
         const token = user?.token;
 
         //JWT
+        if(token){
+            const decodedToken = decode(token);
+
+            if(decodedToken.exp * 1000 < new Date().getTime()){
+                logout();
+            }
+        }
 
 
         setUser(JSON.parse(localStorage.getItem('profile')));
