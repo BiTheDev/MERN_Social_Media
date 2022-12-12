@@ -9,7 +9,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
-import { getPosts, getPostBySearch } from "../../actions/posts";
+import { getPosts, getPostsBySearch } from "../../actions/posts";
 import { useLocation, useHistory } from "react-router-dom";
 import Posts from "../Posts/posts";
 import Form from "../Form/form";
@@ -43,7 +43,7 @@ export const Home = () => {
   const searchPost=()=>{
     if(search.trim() || tags){
         //dispatch to fetch search post
-        dispatch(getPostBySearch({search, tags: tags.join(',')}));
+        dispatch(getPostsBySearch({search, tags: tags.join(',')}));
         history.push(`/posts/search?searchQuery=${search || 'none'}&tags=${tags}`);
     }else{
         history.push('/');
