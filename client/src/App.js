@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Navbar from "./components/NavBar/Navbar";
 import { Home } from "./components/Home/Home";
 import { Auth } from "./components/Auth/Auth";
-import { postDetail } from "./components/Posts/Post/PostDetail/postDetail";
+import postDetails from "./components/Posts/Post/PostDetail/postDetails";
 const App = () => {
   const user = JSON.parse(localStorage.getItem('profile'));
   return (
@@ -15,7 +15,7 @@ const App = () => {
             <Route path="/" exact component={()=><Redirect to="/posts" />}/>
             <Route path="/posts" exact component={Home}  />
             <Route path="/posts/search" exact component={Home}  />
-            <Route path="/posts/:id" component={postDetail}  />
+            <Route path="/posts/:id" component={postDetails}  />
             <Route path="/auth" exact component={()=>(!user ? <Auth/> : <Redirect to="/posts" />)} />
         </Switch>
       </Container>
