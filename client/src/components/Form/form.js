@@ -5,27 +5,30 @@ import { useDispatch } from "react-redux";
 import useStyle from "./styles.js";
 import { createPost,updatePost } from "../../actions/posts.js";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 const Form = ({currentId, setCurrentId}) => {
   const [postData, setPostData] = useState({title:'',message:'', tags:'', selectedFile: ''});
   const post = useSelector((state)=> currentId ? state.posts.find((p)=>p._id === currentId) : null);
   const classes = useStyle();
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem('profile'));
+  const history = useHistory();
 
   useEffect(()=>{
     if(post) setPostData(post);
   }, [post])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(currentId === 0) {
-      dispatch(createPost({...postData, name: user?.result?.name}));
-    }else{
-      dispatch(updatePost(currentId, {...postData, name: user?.result?.name}));
+    if (currentId === 0) {
+      dispatch(createPost({ ...postData, name: user?.result?.name }, history));
+      clear();
+    } else {
+      dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
+      clear();
     }
-    clear();
-  };
+  }
 
   if(!user?.result?.name){
     return (
@@ -37,10 +40,10 @@ const Form = ({currentId, setCurrentId}) => {
     )
   }
 
-  const clear =() =>{
+  const clear = () => {
     setCurrentId(0);
-    setPostData({title:'',message:'', tags:'', selectedFile: ''});
-  }
+    setPostData({ title: '', message: '', tags: [], selectedFile: '' });
+  };
   return (
     <Paper className={classes.paper}>
       <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
