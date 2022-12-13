@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import {
   Card,
   CardActions,
@@ -24,23 +24,26 @@ const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const user = JSON.parse(localStorage.getItem("profile"));
+  const [likes,setLikes] = useState(post?.likes);
+
+  const hasLikes = likes.find((like) => like === (user?.result?.googleId || user?.result?._id));
 
   const Likes = () => {
-    if (post.likes.length > 0) {
-      return post.likes.find(
+    if (likes.length > 0) {
+      return likes.find(
         (like) => like === (user?.result?.googleId || user?.result?._id)
       ) ? (
         <>
           <ThumbUpAltIcon fontSize="small" />
           &nbsp;
-          {post.likes.length > 2
-            ? `You and ${post.likes.length - 1} others`
-            : `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
+          {likes.length > 2
+            ? `You and ${likes.length - 1} others`
+            : `${likes.length} like${likes.length > 1 ? "s" : ""}`}
         </>
       ) : (
         <>
           <ThumbUpAltOutlined fontSize="small" />
-          &nbsp;{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
+          &nbsp;{likes.length} {likes.length === 1 ? "Like" : "Likes"}
         </>
       );
     }
@@ -55,6 +58,17 @@ const Post = ({ post, setCurrentId }) => {
   const openPost = () =>{
     history.push(`/posts/${post._id}`)
   }
+
+  const handleLikes= async()=>{
+    dispatch(likePost(post._id));
+
+    if(hasLikes){
+      setLikes(likes.filter((id)=>id!==(user?.result.googleId || user?.result?._id)))
+    }else{
+      setLikes([...likes,user?.result.googleId || user?.result?._id])
+    }
+  }
+
 
   return (
     <Card className={classes.card} raised elevation={6}>
@@ -92,7 +106,7 @@ const Post = ({ post, setCurrentId }) => {
         </CardContent>
       </ButtonBase>
       <CardActions className={classes.cardActions}>
-        <Button size="small" color="primary" disabled={!user?.result} onClick={() => dispatch(likePost(post._id))}>
+        <Button size="small" color="primary" disabled={!user?.result} onClick={handleLikes}>
           <Likes />
         </Button>
         {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
